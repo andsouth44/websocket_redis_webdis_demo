@@ -1,0 +1,20 @@
+/* Global Styles
+----------------------------*/
+
+html, body {
+    background-color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+}
+
+header {
+	background-color: darkgrey;
+}
+
+h2{
+    color: #58595b;
+    font-size: 2em;
+}
+
+.custom-btn-width {
+    width: 100px;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway" rel="stylesheet">
+
+		<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+ 	</head>
+    <body>
+        <header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-3 pt-3 pb-3">
+                        <img src="/static/img/logo.jpg" height="75">
+                    </div>
+                    <div class="col-7 pt-3 my-auto">
+                        <h2 class="text-white">Send Messages using WebSockets, Redis and Webdis</h2>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main role="main" class="container ml-1">
+            <div class="container content-section mt-4">
+                <form method="POST">
+                    <div class="form-group">
+                        <legend class="border-bottom mb-4">Run Demo</legend>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Run</button>
+                    </div>
+                    <div id="results">
+
+                    </div>
+                </form>
+            </div>
+            <script type="text/javascript">
+
+                var socket = new WebSocket("ws://192.168.199.85:7379/.json");
+
+                var theplace = $("#results")
+
+                // extract user IP from ident passed in from views.py
+                var ident = 666
+                //var ident = '{{ ident }}'
+
+                socket.onopen = function() {
+                    // subscribe to channel using user IP as group name
+                    socket.send(JSON.stringify(["SUBSCRIBE", ident]));
+                };
+                socket.onmessage = function(evt)
+                {
+                    // Extract data string from MessageEvent array and convert to JSON
+                    var data = JSON.parse(evt.data)
+                    console.log(evt)
+                    // Extract the actual message text from the JSON
+                    var message = data.SUBSCRIBE[2]
+
+                    // server side sends a message of "1" to signal successful connection
+                    // We do not want this to trigger a message on the client, so we catch it with
+                    // an if statement and just print to console
+                    if (message == 1){
+                        console.log("Websocket connected.")
+                    }
+                    // Any other messages must be rendered to the client
+                    else{
+                        theplace.append("<div class=\"alert alert-info\" role=\"alert\"><p>" + message + "</p></div>");
+                        $(".alert").show()
+                    }
+
+                };
+            </script>
+        </main>
+	</body>
+</html>

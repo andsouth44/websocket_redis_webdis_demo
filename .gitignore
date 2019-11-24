@@ -1,0 +1,11 @@
+
+.DS_Store
+info.txt
+.idea/
+*.log
+*.xml
+*.pyc
+venv/
+*.png
+.metadata/
+__pycache__
