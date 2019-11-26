@@ -10,7 +10,7 @@ def test_msg():
 	#return "hello world"
     if request.method == 'POST':
 		    # connect to redis server
-        r = redis.client.StrictRedis(host='192.168.199.85', port=6379, db=0, password=None)
+        r = redis.client.StrictRedis(host='192.168.0.71', port=6379, db=0, password=None)
         time.sleep(2)
 
 	    # publish message to redis using group name passed in via ident argument
